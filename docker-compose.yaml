@@ -2,27 +2,27 @@ version: '3'
 services:
 
 ###--- Home Assistant Setup ---###
-  homeassistant:
-    container_name: hass
-    image: homeassistant/home-assistant
-    volumes:
-      - /opt/appdata/hass/config:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: always
-    environment:
-      - PUID=1000
-      - GUID=1000
-    labels:
-      traefik.enable: "true"
-      traefik.frontend.redirect.entryPoint: "https"
-      traefik.frontend.rule: "Host:hass.wooster.xyz"
-      traefik.port: "8123"
-      traefik.docker.network: "plexguide"
-    ports:
-      - 8123:8123
-    networks:
-      - homeassistant
-      - plexguide
+  # homeassistant:
+  #   container_name: hass
+  #   image: homeassistant/home-assistant
+  #   volumes:
+  #     - /opt/appdata/hass/config:/config
+  #     - /etc/localtime:/etc/localtime:ro
+  #   restart: always
+  #   environment:
+  #     - PUID=1000
+  #     - GUID=1000
+  #   labels:
+  #     traefik.enable: "true"
+  #     traefik.frontend.redirect.entryPoint: "https"
+  #     traefik.frontend.rule: "Host:hass.wooster.xyz"
+  #     traefik.port: "8123"
+  #     traefik.docker.network: "plexguide"
+  #   ports:
+  #     - 8123:8123
+  #   networks:
+  #     - homeassistant
+  #     - plexguide
 
 ###--- Node-red Setup ---###
   nodered:
@@ -30,8 +30,8 @@ services:
     container_name: nodered
     image: node-red-docker:v8
     volumes:
-      - nodereddata:/data
-      - noderedmodules:/node_app/node_modules
+      - /opt/appdata/nodered/data:/data
+      - /opt/appdata/nodered/node_modules:/node_app/node_modules
       - /etc/localtime:/etc/localtime:ro
     restart: always
     environment:
@@ -54,7 +54,7 @@ services:
     container_name: mariadb_hass
     image: mariadb
     volumes:
-      - mariadb:/var/lib/mysql
+      - /opt/appdata/mariadb/lib/mysql:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
     restart: always
     environment:
@@ -66,35 +66,35 @@ services:
       - homeassistant
 
 ###--- mosquitto Setup ---###
-  mosquitto:
-    container_name: mosquitto
-    image: eclipse-mosquitto
-    volumes:
-      - mosquitto_config:/mosquitto/config
-      - mosquitto_data:/mosquitto/data
-      - mosquitto_log:/mosquitto/log
-      - /opt/appdata/mosquitto/mosquitto.conf:/mosquitto/mosquitto.conf
-    restart: always
-    environment:
-      - PUID=1000
-      - GUID=1000
+  # mosquitto:
+  #   container_name: mosquitto
+  #   image: eclipse-mosquitto
+  #   volumes:
+  #     - mosquitto_config:/mosquitto/config
+  #     - mosquitto_data:/mosquitto/data
+  #     - mosquitto_log:/mosquitto/log
+  #     - /opt/appdata/mosquitto/mosquitto.conf:/mosquitto/mosquitto.conf
+  #   restart: always
+  #   environment:
+  #     - PUID=1000
+  #     - GUID=1000
 #    labels:
 #      traefik.enable: "true"
 #      traefik.frontend.redirect.entryPoint: "https"
 #      traefik.frontend.rule: "Host:mqtt.wooster.xyz"
 #      traefik.port: "1883"
-    ports:
-      - 1883:1883
-      - 9001:9001
-    networks:
-      - homeassistant
+    # ports:
+    #   - 1883:1883
+    #   - 9001:9001
+    # networks:
+    #   - homeassistant
 
 ###--- TasmoAdmin Setup ---###
   tasmoadmin:
     container_name: tasmoadmin
     image: raymondmm/tasmoadmin
     volumes:
-      - tasmoconfig:/data
+      - /opt/appdata/tasmoadmin/data:/data
     environment:
       - PUID=1000
       - GUID=1000
@@ -108,14 +108,14 @@ services:
       - homeassistant
       - plexguide
 
-volumes:
-  nodereddata:
-  noderedmodules:
-  mariadb:
-  mosquitto_config:
-  mosquitto_data:
-  mosquitto_log:
-  tasmoconfig:
+# volumes:
+#   nodereddata:
+#   noderedmodules:
+#   mariadb:
+#   mosquitto_config:
+#   mosquitto_data:
+#   mosquitto_log:
+#   tasmoconfig:
 
 networks:
   homeassistant:
