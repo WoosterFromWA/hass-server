@@ -85,23 +85,50 @@
       state: started
 
 ###--- TasmoAdmin Setup ---###
- # tasmoadmin:
- #   container_name: tasmoadmin
- #   image: raymondmm/tasmoadmin
- #   volumes:
- #     - tasmoconfig:/data
- #   environment:
- #     - PUID=1000
- #     - GUID=1000
- #   labels:
- #     traefik.enable: "true"
- #     traefik.frontend.redirect.entryPoint: "https"
- #     traefik.frontend.rule: "Host:tasmoadmin.wooster.xyz"
- #     traefik.port: "80"
- #     traefik.docker.network: "plexguide"
- #   networks:
- #     - homeassistant
- #     - plexguide
+  - name: Setup TasmoAdmin
+    docker_container:
+      name: tasmoadmin
+      image: raymondmm/tasmoadmin
+      volumes:
+        - /opt/appdata/tasmoadmin:/data
+      env:
+        PUID: "1000"
+        GUID: "1000"
+      labels:
+        traefik.enable: "true"
+        # traefik.frontend.redirect.entryPoint: "https"
+        traefik.frontend.rule: "Host:tasmoadmin.wooster.xyz"
+        traefik.port: "80"
+        traefik.docker.network: "plexguide"
+      networks:
+        - name: plexguide
+          aliases:
+            - tasmoadmin
+      state: started
+      restart_policy: unless_stopped
+
+### ------ Build VS Code image --------- ###
+  - name: Build VS Code Image
+    command: docker build -t vscode-xe ../image/vscodedocker
+
+  - name: Setup VS Code
+    docker_container:
+      name: vscode
+      image: vscode-xe
+      env:
+        PUID: "1000"
+        GUID: "1000"
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:vscode.wooster.xyz"
+        traefik.port: "80"
+        traefik.docker.network: "plexguide"
+      networks:
+        - name: plexguide
+          aliases:
+            - vscode
+      restart_policy: unless_stopped
+      state: started
 
 #volumes:
 #  nodereddata:
@@ -143,3 +170,4 @@
 #    networks:
 #      - homeassistant
 #      - plexguide
+
