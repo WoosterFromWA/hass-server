@@ -34,24 +34,24 @@
             - hass
 
 ###--- MariaDb Setup ---###
-  - name: Setup MariaDb for Home Assistant
-    docker_container:
-      name: mariadb_hass
-      image: mariadb
-      volumes:
-        - mariadb:/var/lib/mysql
-        - /etc/localtime:/etc/localtime:ro
-      restart_policy: always
-      environment:
-        MYSQL_ROOT_PASSWORD: "woosterexposed"
-        MYSQL_DATABASE: "homeassistant"
-        MYSQL_USER: "hassdb"
-        MYSQL_USER: "woosterexposed"
-      networks:
-        - name: plexguide
-          aliases:
-            - mariadb_hass
-      state: started
+#  - name: Setup MariaDb for Home Assistant
+#    docker_container:
+#      name: mariadb_hass
+#      image: mariadb
+#      volumes:
+#        - mariadb:/var/lib/mysql
+#        - /etc/localtime:/etc/localtime:ro
+#      restart_policy: always
+#      environment:
+#        MYSQL_ROOT_PASSWORD: "woosterexposed"
+#        MYSQL_DATABASE: "homeassistant"
+#        MYSQL_USER: "hassdb"
+#        MYSQL_USER: "woosterexposed"
+#      networks:
+#        - name: plexguide
+#          aliases:
+#            - mariadb_hass
+#      state: started
 
 ##--- mosquitto Setup ---###
   - name: Setup mosquitto
@@ -67,17 +67,17 @@
         # - mosquitto_log:/mosquitto/log
         # - /opt/appdata/mosquitto/mosquitto.conf:/mosquitto/mosquitto.conf
       restart_policy: always
-      environment:
-        - PUID=1000
-        - GUID=1000
-      labels:
-        traefik.enable: "true"
-        # traefik.frontend.redirect.entryPoint: "https"
-        traefik.frontend.rule: "Host:mqtt.wooster.xyz"
-        traefik.port: "1883"
+      env:
+        PUID: "1000"
+        GUID: "1000"
+#      labels:
+#        traefik.enable: "true"
+#        traefik.frontend.redirect.entryPoint: "https"
+#        traefik.frontend.rule: "Host:mqtt.wooster.xyz"
+#        traefik.port: "1883"
       ports:
         - 1883:1883
-        - 9001:9001
+#        - 9001:9001
       networks:
         - name: plexguide
           aliases:
