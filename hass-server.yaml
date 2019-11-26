@@ -105,11 +105,11 @@
           aliases:
             - tasmoadmin
       state: started
-      restart_policy: unless_stopped
+      restart_policy: unless-stopped
 
 ### ------ Build VS Code image --------- ###
   - name: Build VS Code Image
-    command: docker build -t vscode-xe ../image/vscodedocker
+    command: docker build -t vscode-xe -f ./image/vscodedocker .
 
   - name: Setup VS Code
     docker_container:
@@ -127,7 +127,7 @@
         - name: plexguide
           aliases:
             - vscode
-      restart_policy: unless_stopped
+      restart_policy: unless-stopped
       state: started
 
 #volumes:
