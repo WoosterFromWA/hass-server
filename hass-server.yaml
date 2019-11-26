@@ -107,28 +107,48 @@
       state: started
       restart_policy: unless-stopped
 
-### ------ Build VS Code image --------- ###
-  - name: Build VS Code Image
-    command: docker build -t vscode-xe -f ./image/vscodedocker .
-
-  - name: Setup VS Code
+### --------- code-server --------------- ###
+  - name: Setup code-server
     docker_container:
-      name: vscode
-      image: vscode-xe
+      name: code-server
+      image: codercom/code-server
       env:
         PUID: "1000"
-        GUID: "1000"
+        PGID: "1000"
       labels:
         traefik.enable: "true"
         traefik.frontend.rule: "Host:vscode.wooster.xyz"
-        traefik.port: "80"
+        traefik.port: "8080"
         traefik.docker.network: "plexguide"
       networks:
         - name: plexguide
           aliases:
-            - vscode
+            - code-server
       restart_policy: unless-stopped
       state: started
+
+### ------ Build VS Code image --------- ###
+  # - name: Build VS Code Image
+  #   command: docker build -t vscode-xe ./image
+
+  # - name: Setup VS Code
+  #   docker_container:
+  #     name: vscode
+  #     image: vscode-xe
+  #     env:
+  #       PUID: "1000"
+  #       GUID: "1000"
+  #     labels:
+  #       traefik.enable: "true"
+  #       traefik.frontend.rule: "Host:vscode.wooster.xyz"
+  #       traefik.port: "80"
+  #       traefik.docker.network: "plexguide"
+  #     networks:
+  #       - name: plexguide
+  #         aliases:
+  #           - vscode
+  #     restart_policy: unless-stopped
+  #     state: started
 
 #volumes:
 #  nodereddata:
